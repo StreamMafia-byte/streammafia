@@ -42,7 +42,6 @@
             border-radius: 12px;
             margin-bottom: 10px;
             transition: transform 0.3s ease;
-            cursor: pointer; /* Indica que se puede tocar */
         }
 
         .logo-negocio:hover {
@@ -206,11 +205,11 @@
             box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
         }
 
-        /* Alerta dinámica flotante */
+        /* Alerta dinámica flotante - Ahora es un botón secreto */
         .alerta-flotante {
             background-color: #020617;
             border: 1px solid var(--morado-marca);
-            padding: 8px 15px;
+            padding: 10px 18px;
             border-radius: 30px;
             font-size: 0.85rem;
             color: #38bdf8;
@@ -219,6 +218,9 @@
             align-items: center;
             gap: 8px;
             font-weight: 500;
+            cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
+            user-select: none;
+            -webkit-user-select: none;
         }
         .punto-verde {
             width: 8px;
@@ -238,7 +240,7 @@
 <body>
 
     <header>
-        <img src="logo.png" alt="StreamMafia Logo" class="logo-negocio" ondblclick="abrirPanelSecreto()">
+        <img src="logo.png" alt="StreamMafia Logo" class="logo-negocio">
         <p>Cuentas de Streaming Premium</p>
         
         <div class="nota-importante">
@@ -256,7 +258,7 @@
         </div>
     </div>
 
-    <div class="alerta-flotante">
+    <div class="alerta-flotante" onclick="abrirPanelSecreto()">
         <span class="punto-verde"></span> Conectando al sistema...
     </div>
 
@@ -394,7 +396,7 @@
             }
         }
 
-        // 3. Sistema Activo con Hora Real y Panel de Edición Local Manual
+        // 3. Sistema Activo con Hora Real y Panel Táctil Directo
         function actualizarSistemaActivo() {
             let alertaFlotante = document.querySelector('.alerta-flotante');
             
@@ -403,32 +405,31 @@
             let minutos = ahora.getMinutes().toString().padStart(2, '0');
             let horaFormateada = `${hora}:${minutos}`;
 
-            // Buscar si ya guardaste una cantidad personalizada en este celular, sino usar 35 por defecto
-            let stockGuardado = localStorage.getItem('stock_mafia') || "35";
+            // Si no hay nada guardado en el cel, arranca mostrando 30 por defecto
+            let stockGuardado = localStorage.getItem('stock_mafia') || "30";
 
-            alertaFlotante.innerHTML = `<span class="punto-verde"></span> Sistema Activo (Verificado ${horaFormateada}) | <span>${stockGuardado}</span> pantallas disponibles para entrega inmediata`;
+            alertaFlotante.innerHTML = `<span class="punto-verde"></span> Sistema Activo (Verificado ${horaFormateada}) | <span style="font-weight:bold;color:#a78bfa;">${stockGuardado}</span> pantallas disponibles para entrega inmediata`;
         }
 
-        // FUNCIÓN SECRETA PARA CAMBIAR EL NÚMERO DESDE LA PÁGINA
+        // NUEVA FUNCIÓN OPTIMIZADA: Abre con 1 solo toque en la barra azul
         function abrirPanelSecreto() {
             let clave = prompt("🔐 Ingrese la clave de Administrador de StreamMafia:");
             
-            // La contraseña secreta es: mafia123
+            // La contraseña sigue siendo: mafia123
             if (clave === "mafia123") {
-                let nuevoStock = prompt("📊 ¿Cuántas pantallas disponibles quieres mostrar en el catálogo ahora mismo?");
+                let nuevoStock = prompt("📊 ¿Cuántas pantallas disponibles quieres mostrar en el catálogo?");
                 
                 if (nuevoStock !== null && nuevoStock.trim() !== "") {
-                    // Guardar el número en la memoria del celular
                     localStorage.setItem('stock_mafia', nuevoStock);
-                    actualizarSistemaActivo(); // Refrescar el texto de inmediato
-                    alert("✅ Cantidad actualizada con éxito en este dispositivo.");
+                    actualizarSistemaActivo(); // Actualiza el texto al instante
+                    alert("✅ Cantidad actualizada con éxito.");
                 }
             } else if (clave !== null) {
                 alert("❌ Clave incorrecta. Acceso denegado.");
             }
         }
 
-        // Iniciar el reloj y el stock al cargar
+        // Arrancar el reloj al cargar
         actualizarSistemaActivo();
         setInterval(actualizarSistemaActivo, 5000);
     </script>
