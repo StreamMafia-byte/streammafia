@@ -156,7 +156,7 @@
             transition: transform 0.2s ease, border-left-color 0.2s, box-shadow 0.2s;
         }
 
-        /* Efecto Glow interactivo al pasar el mouse o tocar */
+        /* Efecto Glow interactivo al pasar el mouse */
         .item-precio:hover {
             transform: translateX(5px);
             border-left-color: #38bdf8; /* Cambia a azul brillante */
@@ -257,7 +257,7 @@
     </div>
 
     <div class="alerta-flotante">
-        <span class="punto-verde"></span> Sistema en línea | <span id="contador-cuentas">45</span> pantallas disponibles para entrega inmediata
+        <span class="punto-verde"></span> Conectando al sistema... | <span id="contador-cuentas">45</span> pantallas disponibles
     </div>
 
     <section id="sec-individual" class="bloque-catalogo">
@@ -271,7 +271,6 @@
             <span>🟢 Spotify Premium</span>
             <span class="precio">80 lps</span>
         </div>
-        
         <div class="item-precio" data-nombre="netflix">
             <span>🎬 Netflix</span>
             <span class="precio">130 lps</span>
@@ -321,7 +320,6 @@
             <span>📺 IPTV + ⚽ Vix (Pase Futbolero Completo)</span>
             <span class="precio">180 lps</span>
         </div>
-
         <div class="item-precio" data-nombre="youtube music netflix combo">
             <span>🎵 Youtube Music + 🎬 Netflix</span>
             <span class="precio">260 lps</span>
@@ -396,18 +394,36 @@
             }
         }
 
-        // 3. Efecto dinámico de simulación de stock (Contador vivo)
-        setInterval(() => {
+        // 3. Sistema Activo con Hora Real y Simulación Inteligente de Stock
+        function actualizarSistemaActivo() {
             let contador = document.getElementById('contador-cuentas');
-            let numeroActual = parseInt(contador.innerText);
-            let cambio = Math.random() > 0.5 ? 1 : -1;
+            let alertaFlotante = document.querySelector('.alerta-flotante');
+            
+            // Obtener la hora y minutos del dispositivo del cliente
+            let ahora = new Date();
+            let hora = ahora.getHours().toString().padStart(2, '0');
+            let minutos = ahora.getMinutes().toString().padStart(2, '0');
+            let horaFormateada = `${hora}:${minutos}`;
+
+            // Conservar el número interno o inicializarlo si es la primera vez
+            let numeroActual = parseInt(contador ? contador.innerText : "45");
+
+            // Simular pequeñas variaciones de stock (entre 38 y 49 pantallas)
+            let cambio = Math.random() > 0.6 ? 1 : -1;
             let nuevoNumero = numeroActual + cambio;
             
             if(nuevoNumero > 49) nuevoNumero = 44;
             if(nuevoNumero < 38) nuevoNumero = 46;
-            
-            contador.innerText = nuevoNumero;
-        }, 7000);
+
+            // Actualizar todo el cartel con la hora fresca del sistema
+            alertaFlotante.innerHTML = `<span class="punto-verde"></span> Sistema Activo (Verificado ${horaFormateada}) | <span id="contador-cuentas">${nuevoNumero}</span> pantallas disponibles para entrega inmediata`;
+        }
+
+        // Ejecutar inmediatamente al abrir la página
+        actualizarSistemaActivo();
+
+        // Refrescar cada 5 segundos la hora y el stock
+        setInterval(actualizarSistemaActivo, 5000);
     </script>
 
 </body>
