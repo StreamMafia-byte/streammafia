@@ -42,6 +42,7 @@
             border-radius: 12px;
             margin-bottom: 10px;
             transition: transform 0.3s ease;
+            cursor: pointer; /* Indica que se puede tocar */
         }
 
         .logo-negocio:hover {
@@ -237,7 +238,7 @@
 <body>
 
     <header>
-        <img src="logo.png" alt="StreamMafia Logo" class="logo-negocio">
+        <img src="logo.png" alt="StreamMafia Logo" class="logo-negocio" ondblclick="abrirPanelSecreto()">
         <p>Cuentas de Streaming Premium</p>
         
         <div class="nota-importante">
@@ -355,11 +356,6 @@
     </section>
 
     <script>
-        // === 🛠️ AQUÍ EDITAS TU STOCK MANUALLY ===
-        // Cambia el número de abajo por la cantidad real de pantallas que tienes listas
-        const PANTALLAS_DISPONIBLES = 25; 
-        // =========================================
-
         // 1. Lógica del Buscador en tiempo real
         document.getElementById('buscador').addEventListener('input', function(e) {
             let termino = e.target.value.toLowerCase().trim();
@@ -398,7 +394,7 @@
             }
         }
 
-        // 3. Sistema Activo con Hora Real Dinámica y Stock Fijo Controlado
+        // 3. Sistema Activo con Hora Real y Panel de Edición Local Manual
         function actualizarSistemaActivo() {
             let alertaFlotante = document.querySelector('.alerta-flotante');
             
@@ -407,9 +403,32 @@
             let minutos = ahora.getMinutes().toString().padStart(2, '0');
             let horaFormateada = `${hora}:${minutos}`;
 
-            alertaFlotante.innerHTML = `<span class="punto-verde"></span> Sistema Activo (Verificado ${horaFormateada}) | <span>${PANTALLAS_DISPONIBLES}</span> pantallas disponibles para entrega inmediata`;
+            // Buscar si ya guardaste una cantidad personalizada en este celular, sino usar 35 por defecto
+            let stockGuardado = localStorage.getItem('stock_mafia') || "35";
+
+            alertaFlotante.innerHTML = `<span class="punto-verde"></span> Sistema Activo (Verificado ${horaFormateada}) | <span>${stockGuardado}</span> pantallas disponibles para entrega inmediata`;
         }
 
+        // FUNCIÓN SECRETA PARA CAMBIAR EL NÚMERO DESDE LA PÁGINA
+        function abrirPanelSecreto() {
+            let clave = prompt("🔐 Ingrese la clave de Administrador de StreamMafia:");
+            
+            // La contraseña secreta es: mafia123
+            if (clave === "mafia123") {
+                let nuevoStock = prompt("📊 ¿Cuántas pantallas disponibles quieres mostrar en el catálogo ahora mismo?");
+                
+                if (nuevoStock !== null && nuevoStock.trim() !== "") {
+                    // Guardar el número en la memoria del celular
+                    localStorage.setItem('stock_mafia', nuevoStock);
+                    actualizarSistemaActivo(); // Refrescar el texto de inmediato
+                    alert("✅ Cantidad actualizada con éxito en este dispositivo.");
+                }
+            } else if (clave !== null) {
+                alert("❌ Clave incorrecta. Acceso denegado.");
+            }
+        }
+
+        // Iniciar el reloj y el stock al cargar
         actualizarSistemaActivo();
         setInterval(actualizarSistemaActivo, 5000);
     </script>
