@@ -2,35 +2,50 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png?v=3">
     <link rel="shortcut icon" href="logo.png?v=3" type="image/x-icon">
     <title>StreamMafia - Cuentas de Streaming</title>
     
     <style>
+        :root {
+            --bg-principal: #0b0f19;
+            --bg-tarjetas: #1e293b;
+            --morado-marca: #7c3aed;
+            --morado-brillo: #a78bfa;
+            --verde-wa: #25d366;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0b0f19; /* Fondo oscuro que resalta el logo */
+            background-color: var(--bg-principal);
             color: #f8fafc; 
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
 
         header {
             background-color: #020617; 
-            border-bottom: 3px solid #7c3aed; /* Línea morada de tu marca */
+            border-bottom: 3px solid var(--morado-marca);
             width: 100%;
             text-align: center;
             padding: 40px 0;
+            position: relative;
         }
 
         .logo-negocio {
-            max-width: 250px; 
+            max-width: 230px; 
             height: auto;
             border-radius: 12px;
             margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-negocio:hover {
+            transform: scale(1.05) rotate(1deg);
         }
 
         header p {
@@ -40,7 +55,7 @@
         }
 
         .nota-importante {
-            background-color: #ef4444; /* Rojo para llamar la atención */
+            background-color: #ef4444; 
             color: white;
             padding: 10px 20px;
             border-radius: 20px;
@@ -49,56 +64,118 @@
             display: inline-block;
             margin-top: 15px;
             box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+            animation: pulso 2s infinite;
         }
 
-        section {
-            background-color: #1e293b; 
+        @keyframes pulso {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- CONTROLES DINÁMICOS (Buscador y Filtros) --- */
+        .herramientas-interactivas {
             width: 85%;
             max-width: 650px;
-            margin: 20px 0;
+            margin: 25px 0 10px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .caja-busqueda {
+            width: 100%;
+            padding: 14px 20px;
+            background-color: var(--bg-tarjetas);
+            border: 2px solid #334155;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .caja-busqueda:focus {
+            border-color: var(--morado-marca);
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+        }
+
+        .botones-filtro {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-filtro {
+            background-color: #334155;
+            color: #cbd5e1;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-filtro.activo, .btn-filtro:hover {
+            background-color: var(--morado-marca);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        /* --- SECCIONES Y CONTENEDOR ANMADO --- */
+        section {
+            background-color: var(--bg-tarjetas); 
+            width: 85%;
+            max-width: 650px;
+            margin: 15px 0;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         h2 {
-            color: #a78bfa; /* Morado claro para los títulos */
+            color: var(--morado-brillo);
             border-bottom: 1px solid #475569;
             padding-bottom: 10px;
             margin-top: 0;
         }
 
-        /* Contenedor para alinear plataforma y precio */
         .item-precio {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #0b0f19;
-            padding: 12px 18px;
-            margin: 10px 0;
+            background-color: var(--bg-principal);
+            padding: 14px 18px;
+            margin: 12px 0;
             border-radius: 6px;
-            border-left: 4px solid #7c3aed; /* Detalle morado */
+            border-left: 4px solid var(--morado-marca);
+            transition: transform 0.2s ease, border-left-color 0.2s, box-shadow 0.2s;
         }
 
-        .item-precio span {
-            font-size: 1.05rem;
-            font-weight: 500;
+        /* Efecto Glow interactivo al pasar el mouse */
+        .item-precio:hover {
+            transform: translateX(5px);
+            border-left-color: #38bdf8; /* Cambia a azul brillante */
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.25);
         }
 
         .precio {
-            color: #a78bfa;
+            color: var(--morado-brillo);
             font-weight: bold;
             font-size: 1.1rem;
         }
 
-        /* Estilo para los mensajes informativos o llamadas de atención */
         .aviso-info {
-            background-color: #1e1b4b; /* Morado muy oscuro */
-            border: 2px dashed #7c3aed;
+            background-color: #1e1b4b;
+            border: 2px dashed var(--morado-marca);
             padding: 15px;
             border-radius: 8px;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .aviso-info p {
@@ -109,7 +186,7 @@
 
         /* Botón de WhatsApp */
         .btn-whatsapp {
-            background-color: #25d366;
+            background-color: var(--verde-wa);
             color: white;
             border: none;
             padding: 16px 20px;
@@ -118,14 +195,43 @@
             border-radius: 6px;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.2s, background-color 0.2s;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
             margin-top: 15px;
         }
 
         .btn-whatsapp:hover {
             background-color: #128c7e;
-            transform: scale(1.02); 
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Alerta dinámica flotante */
+        .alerta-flotante {
+            background-color: #020617;
+            border: 1px solid var(--morado-marca);
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #38bdf8;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        .punto-verde {
+            width: 8px;
+            height: 8px;
+            background-color: #25d366;
+            border-radius: 50%;
+            display: inline-block;
+            animation: parpadeo 1.5s infinite;
+        }
+        @keyframes parpadeo {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
         }
     </style>
 </head>
@@ -140,84 +246,154 @@
         </div>
     </header>
 
-    <section>
+    <div class="herramientas-interactivas">
+        <input type="text" id="buscador" class="caja-busqueda" placeholder="🔍 Busca tu plataforma favorita (ej: Netflix, Max)...">
+        
+        <div class="botones-filtro">
+            <button class="btn-filtro activo" onclick="filtrarCategoria('todos', this)">🔥 Todo</button>
+            <button class="btn-filtro" onclick="filtrarCategoria('individual', this)">🎬 Plataformas</button>
+            <button class="btn-filtro" onclick="filtrarCategoria('combo', this)">🍿 Combos</button>
+        </div>
+    </div>
+
+    <div class="alerta-flotante">
+        <span class="punto-verde"></span> Sistema en línea | <span id="contador-cuentas">42</span> pantallas disponibles para entrega inmediata
+    </div>
+
+    <section id="sec-individual" class="bloque-catalogo">
         <h2>Plataformas Individuales</h2>
         
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="netflix">
             <span>🎬 Netflix</span>
             <span class="precio">130 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="vix">
             <span>⚽ Vix</span>
             <span class="precio">80 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="paramount">
             <span>⛰️ Paramount</span>
             <span class="precio">85 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="max hbo">
             <span>👾 Max</span>
             <span class="precio">95 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="youtube music premium">
             <span>🎵 Youtube Music</span>
             <span class="precio">160 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="crunchyroll anime">
             <span>⛩️ Crunchyroll</span>
             <span class="precio">80 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="disney plus">
             <span>🏰 Disney</span>
             <span class="precio">95 lps</span>
         </div>
 
         <div class="aviso-info">
-            <p>🔍 ¿No ves tu plataforma favorita? ¡Pregúntanos por ella y te la conseguimos!</p>
+            <p>🔍 ¿No ves tu plataforma favorita? ¡Pregúntanos por ella!</p>
         </div>
     </section>
 
-    <section>
+    <section id="sec-combo" class="bloque-catalogo">
         <h2>Combos Especiales 🔥</h2>
         
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="youtube music netflix combo">
             <span>🎵 Youtube Music + 🎬 Netflix</span>
             <span class="precio">260 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="netflix prime video combo">
             <span>🎬 Netflix + 📦 Prime Video</span>
             <span class="precio">195 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="disney netflix combo">
             <span>🏰 Disney + 🎬 Netflix</span>
             <span class="precio">205 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="paramount crunchyroll combo">
             <span>⛰️ Paramount + ⛩️ Crunchyroll</span>
             <span class="precio">160 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="netflix vix combo">
             <span>🎬 Netflix + ⚽ Vix</span>
             <span class="precio">190 lps</span>
         </div>
-        <div class="item-precio">
+        <div class="item-precio" data-nombre="netflix max combo">
             <span>🎬 Netflix + 👾 Max</span>
             <span class="precio">205 lps</span>
         </div>
 
         <div class="aviso-info">
-            <p>💡 ¡También puedes armar y solicitar tus combos personalizados y te damos el mejor precio del mercado!</p>
+            <p>💡 ¡Arma tus combos personalizados al mejor precio!</p>
         </div>
     </section>
 
     <section style="text-align: center;">
         <h2>¿Listo para activar tu pantalla?</h2>
-        <p style="color: #94a3b8; margin-bottom: 20px;">Haz clic abajo para solicitar tu cuenta. Entrega inmediata y soporte garantizado.</p>
+        <p style="color: #94a3b8; margin-bottom: 20px;">Haz clic abajo para solicitar tu cuenta de inmediato por WhatsApp.</p>
         
         <a href="https://wa.link/b9w2wj" target="_blank" style="text-decoration: none;">
             <button class="btn-whatsapp">📱 Solicitar por WhatsApp</button>
         </a>
     </section>
+
+    <script>
+        // 1. Lógica del Buscador en tiempo real
+        document.getElementById('buscador').addEventListener('input', function(e) {
+            let termino = e.target.value.toLowerCase().trim();
+            let items = document.querySelectorAll('.item-precio');
+            
+            items.forEach(item => {
+                let nombreProducto = item.getAttribute('data-nombre');
+                if(nombreProducto.includes(termino)) {
+                    item.style.display = "flex";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+
+        // 2. Lógica de Filtros por Categorías
+        function filtrarCategoria(categoria, botonActivo) {
+            // Cambiar estado activo de los botones
+            document.querySelectorAll('.btn-filtro').forEach(btn => btn.classList.remove('activo'));
+            botonActivo.classList.add('activo');
+
+            let secIndividual = document.getElementById('sec-individual');
+            let secCombo = document.getElementById('sec-combo');
+
+            // Resetear buscador al cambiar filtro
+            document.getElementById('buscador').value = "";
+            document.querySelectorAll('.item-precio').forEach(item => item.style.display = "flex");
+
+            if(categoria === 'todos') {
+                secIndividual.style.display = "block";
+                secCombo.style.display = "block";
+            } else if(categoria === 'individual') {
+                secIndividual.style.display = "block";
+                secCombo.style.display = "none";
+            } else if(categoria === 'combo') {
+                secIndividual.style.display = "none";
+                secCombo.style.display = "block";
+            }
+        }
+
+        // 3. Efecto dinámico de simulación de stock (Contador vivo)
+        setInterval(() => {
+            let contador = document.getElementById('contador-cuentas');
+            let numeroActual = parseInt(contador.innerText);
+            // Cambia el número de forma aleatoria para simular movimiento real de ventas
+            let cambio = Math.random() > 0.5 ? 1 : -1;
+            let nuevoNumero = numeroActual + cambio;
+            
+            if(nuevoNumero > 48) nuevoNumero = 42;
+            if(nuevoNumero < 35) nuevoNumero = 45;
+            
+            contador.innerText = nuevoNumero;
+        }, 7000);
+    </script>
 
 </body>
 </html>
